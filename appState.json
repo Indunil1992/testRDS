@@ -1,0 +1,170 @@
+{
+  "EDITOR_STATE": {
+    "allProjectFiles": {
+      "7a2c98bd-48a4-45d1-8447-86bce93ceb8c": {
+        "id": "7a2c98bd-48a4-45d1-8447-86bce93ceb8c",
+        "parent": null,
+        "name": "testRDS",
+        "type": "DIRECTORY",
+        "isDirectory": true,
+        "children": [
+          "dff81ebb-0d0b-4e56-91dd-9ab8af4e46c0",
+          "0793e0db-3bf3-4110-a709-7c456a75f880"
+        ],
+        "isRemovable": false,
+        "filePath": "testRDS"
+      },
+      "dff81ebb-0d0b-4e56-91dd-9ab8af4e46c0": {
+        "id": "dff81ebb-0d0b-4e56-91dd-9ab8af4e46c0",
+        "parent": "7a2c98bd-48a4-45d1-8447-86bce93ceb8c",
+        "name": "lambda.js",
+        "type": "JS_LAMBDA",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "testRDS/lambda.js",
+        "code": "let SL_AWS = require('slappforge-sdk-aws');\nlet connectionManager = require('./ConnectionManager');\nconst rds = new SL_AWS.RDS(connectionManager);\n\nexports.handler = function (event, context, callback) {\n\n    // You can pass the existing connection to this function.\n    // A new connection will be created if it's not present as the third param \n    // You must always end/destroy the DB connection after it's used\n    rds.query({\n        instanceIdentifier: 'indunil',\n        query: 'Insert INTO Customers (CustomerName, Address,Number)',\n        inserts: [\"Indunil\", \"142Kandy\", \"0812422333\"]\n    }, function (error, results, connection) {\n        if (error) {\n            console.log(\"Error occurred\");\n            console.log(error);\n            throw error;\n        } else {\n            console.log(\"Success\");\n            console.log(results);\n        }\n\n        connection.end();\n    });\n\n    callback(null, { \"message\": \"Successfully executed\" });\n}",
+        "config": {
+          "runtime": "nodejs8.10",
+          "handler": "handler",
+          "timeout": 60,
+          "memory": 128,
+          "layers": []
+        },
+        "triggers": [
+          {
+            "resourceName": "apigeuWest1IrelandAPI1testany",
+            "config": {}
+          }
+        ]
+      },
+      "0793e0db-3bf3-4110-a709-7c456a75f880": {
+        "id": "0793e0db-3bf3-4110-a709-7c456a75f880",
+        "parent": "7a2c98bd-48a4-45d1-8447-86bce93ceb8c",
+        "name": "ConnectionManager.js",
+        "type": "JS_FILE",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "testRDS/ConnectionManager.js",
+        "code": "module.exports = function() {\n    this.dbConnections = [];\n\n    this.dbConnections[\"indunil\"] = {\n        host: process.env.EndPoint_rdsIndunil,\n        port: process.env.Port_rdsIndunil,\n        user: process.env.User_rdsIndunil,\n        password: process.env.Password_rdsIndunil,\n        database: \"myDB\"\n    };\n};"
+      }
+    },
+    "rootNode": "7a2c98bd-48a4-45d1-8447-86bce93ceb8c",
+    "openFiles": [
+      "dff81ebb-0d0b-4e56-91dd-9ab8af4e46c0"
+    ],
+    "currentFileId": "dff81ebb-0d0b-4e56-91dd-9ab8af4e46c0",
+    "resources": {
+      "rds-indunil": {
+        "name": "rds-indunil",
+        "type": "RDS",
+        "config": {
+          "editMode": false,
+          "operation": 0,
+          "rdsInstance": {
+            "rdsEngineType": "mysql",
+            "rdsEdition": "",
+            "rdsInstanceSpec": {
+              "dbInstanceClass": "db.t2.micro",
+              "dbLicenseModel": "general-public-license",
+              "dbEngineVersion": "5.7.19"
+            },
+            "rdsSetting": {
+              "instanceIdentifier": "indunil",
+              "masterUsername": "sachithra",
+              "masterPassword": "sachithra"
+            },
+            "rdsDBOptions": {
+              "dbName": "myDB",
+              "dbPort": "3306"
+            },
+            "rdsInstanceArn": "",
+            "Host": "",
+            "doesExist": false,
+            "initializationQuery": "CREATE DATABASE testDB;",
+            "alreadyDeployed": false
+          },
+          "rdsInstanceResources": [],
+          "projectRegion": "eu-west-1",
+          "mode": 0,
+          "additionalFiles": [],
+          "params": {
+            "query": "Insert INTO Customers (CustomerName, Address,Number)",
+            "inserts": "\"Indunil\", \"142Kandy\",  \"0812422333\""
+          },
+          "isGlobalEditMode": false,
+          "enableInject": true,
+          "isNewFromGlobal": false
+        }
+      },
+      "apigeuWest1IrelandAPI1testany": {
+        "name": "apigeuWest1IrelandAPI1testany",
+        "type": "API_GATEWAY",
+        "config": {
+          "selectedRegion": "eu-west-1",
+          "apiMode": 1,
+          "apiName": "IrelandAPI1",
+          "apiId": "9rk93h846f",
+          "endpointType": "EDGE",
+          "rootResourceId": "h8d83sjrc4",
+          "existingResources": {
+            "/": "h8d83sjrc4",
+            "/test": "uilaba"
+          },
+          "resourceMode": 1,
+          "resourcePath": "/test",
+          "resourceName": "test",
+          "resourceId": "uilaba",
+          "restMethod": "ANY",
+          "proxyIntegration": false,
+          "enableCORS": false,
+          "stageMode": 0,
+          "stageName": "Test1",
+          "mode": 1
+        }
+      }
+    },
+    "customTemplate": {
+      "dialect": null,
+      "definitions": null
+    },
+    "envVariables": [
+      {
+        "lambdaId": "all",
+        "varKey": "SIGMA_AWS_ACC_ID",
+        "varValue": null,
+        "shouldPersist": false,
+        "displayOnly": false,
+        "editable": false
+      }
+    ],
+    "packageJSON": {
+      "dependencies": {
+        "slappforge-sdk-aws": {
+          "name": "slappforge-sdk-aws",
+          "language": "javascript",
+          "version": "0.0.5",
+          "dev": false,
+          "notRemovable": false
+        }
+      }
+    }
+  },
+  "PROJECT_META": {
+    "projectName": "testRDS",
+    "projectDescription": "",
+    "projectVersion": "1.0.0",
+    "projectRegion": "eu-west-1",
+    "platform": "AWS",
+    "platformRegions": {},
+    "lastSave": 1568206018967
+  },
+  "VCS_STATE": {
+    "provider": "GitHub",
+    "repo": {
+      "name": "testRDS",
+      "url": "https://github.com/Indunil1992/testRDS"
+    }
+  }
+}
